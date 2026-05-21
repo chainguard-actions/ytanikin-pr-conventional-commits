@@ -1,0 +1,26 @@
+{
+  "name": "pr-conventional-commit-check",
+  "version": "1.0.0",
+  "description": "A GitHub action that checks PR titles for adherence to conventional commit standards and specific task types.",
+  "main": "index.js",
+  "homepage": "https://github.com/ytanikin/PRConventionalCommits.git",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1",
+    "conventional-commits-parser": "^3.2.4"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "jest-when": "^3.6.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@personal:ytanikin/PRConventionalCommits.git"
+  },
+  "author": "Yeldos Tanikin",
+  "license": "ISC"
+}
