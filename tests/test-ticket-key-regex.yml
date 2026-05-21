@@ -1,0 +1,25 @@
+name: Test ticket_key_regex validation
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_REF: refs/pull/2/merge
+      GITHUB_HEAD_REF: feature-branch
+      GITHUB_BASE_REF: main
+      GITHUB_EVENT_PATH: ${{ github.workspace }}/actions/hardened/ytanikin--pr-conventional-commits/1.4.1/tests/fixtures/pr-event-with-ticket.json
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+          ticket_key_regex: 'PROJECT-\d{2,5}'
+          add_label: 'false'
+          token: 'dummy-token'
+      - name: Assert action completed with ticket validation
+        run: |
+          echo "Action completed successfully with ticket_key_regex validation"
+          echo "PASS"
