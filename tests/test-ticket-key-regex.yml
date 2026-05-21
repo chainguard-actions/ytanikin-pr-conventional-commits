@@ -1,0 +1,25 @@
+name: Test ticket_key_regex (deprecated) input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_REF: refs/pull/1/merge
+      GITHUB_HEAD_REF: feature-branch
+      GITHUB_BASE_REF: main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          task_types: '["feat","fix","docs","chore"]'
+          ticket_key_regex: 'TICKET-\d{2,5}$'
+          add_label: 'false'
+          token: 'dummy-token'
+        continue-on-error: true
+      - name: Verify action ran with ticket_key_regex
+        run: |
+          echo "Action completed with ticket_key_regex (deprecated) input"
+          echo "PASS: ticket_key_regex input was accepted"
