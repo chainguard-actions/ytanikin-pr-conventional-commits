@@ -6,10 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_EVENT_NAME: pull_request
-      GITHUB_REF: refs/pull/1/merge
       GITHUB_HEAD_REF: feature-branch
       GITHUB_BASE_REF: main
-      GITHUB_EVENT_PATH: ${{ github.workspace }}/actions/hardened/ytanikin--pr-conventional-commits/1.4.1/tests/fixtures/pr-event.json
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - id: action
@@ -17,8 +15,11 @@ jobs:
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
           add_label: 'false'
-          token: 'dummy-token'
+          token: ${{ github.token }}
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          PR_TITLE: 'feat: add new feature'
       - name: Assert action completed
         run: |
-          echo "Action completed successfully with task_types input"
+          echo "Action completed successfully"
           echo "PASS"
