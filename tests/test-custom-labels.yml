@@ -6,19 +6,48 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_EVENT_NAME: pull_request
-      GITHUB_REF: refs/pull/1/merge
-      GITHUB_HEAD_REF: feature-branch
-      GITHUB_BASE_REF: main
+      GITHUB_REF: refs/pull/5/merge
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create mock PR event payload
+        run: |
+          mkdir -p /tmp/mock-event
+          cat > /tmp/mock-event/event.json <<'EOF'
+          {
+            "action": "opened",
+            "pull_request": {
+              "number": 5,
+              "title": "feat: add new feature",
+              "head": {
+                "ref": "feature/new-feature",
+                "sha": "mno345"
+              },
+              "base": {
+                "ref": "main"
+              },
+              "labels": []
+            },
+            "repository": {
+              "name": "test-repo",
+              "full_name": "test-owner/test-repo",
+              "owner": {
+                "login": "test-owner"
+              }
+            }
+          }
+          EOF
+
       - id: action
         uses: .
+        env:
+          GITHUB_EVENT_PATH: /tmp/mock-event/event.json
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          custom_labels: '{"feat":"feature","fix":"fix","docs":"documentation","test":"test","ci":"CI/CD","refactor":"refactor","perf":"performance","chore":"chore","revert":"revert"}'
+          custom_labels: '{"feat": "feature", "fix": "fix", "docs": "documentation", "test": "test", "ci": "CI/CD", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
           add_label: 'false'
-          token: 'dummy-token'
-      - name: Assert action completed
+
+      - name: Assert action completed successfully with custom_labels
         run: |
-          echo "Action completed with custom_labels input"
+          echo "Action completed with custom_labels mapping"
           echo "PASS"
