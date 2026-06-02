@@ -17,8 +17,8 @@ jobs:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
           scope_types: '["login","signup","checkout","payment",""]'
           add_label: 'false'
-        continue-on-error: true
-      - name: Assert action ran with scope_types
+          token: 'dummy-token'
+      - name: Assert action completed
         run: |
           echo "Action completed with scope_types input"
-          echo "PASS: action accepted scope_types input"
+          echo "PASS"

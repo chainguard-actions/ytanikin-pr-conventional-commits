@@ -17,8 +17,8 @@ jobs:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
           custom_labels: '{"feat":"feature","fix":"fix","docs":"documentation","test":"test","ci":"CI/CD","refactor":"refactor","perf":"performance","chore":"chore","revert":"revert"}'
           add_label: 'false'
-        continue-on-error: true
-      - name: Assert action ran with custom_labels
+          token: 'dummy-token'
+      - name: Assert action completed
         run: |
           echo "Action completed with custom_labels input"
-          echo "PASS: action accepted custom_labels input"
+          echo "PASS"

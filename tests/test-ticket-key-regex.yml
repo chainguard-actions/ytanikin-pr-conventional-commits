@@ -15,10 +15,10 @@ jobs:
         uses: .
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          ticket_key_regex: 'PROJ-\d+'
+          ticket_key_regex: 'TICKET-\d+'
           add_label: 'false'
-        continue-on-error: true
-      - name: Assert action ran with ticket_key_regex
+          token: 'dummy-token'
+      - name: Assert action completed
         run: |
           echo "Action completed with ticket_key_regex input"
-          echo "PASS: action accepted ticket_key_regex input"
+          echo "PASS"

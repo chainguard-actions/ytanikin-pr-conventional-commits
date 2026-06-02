@@ -17,8 +17,8 @@ jobs:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
           title_regex: 'PROJECT-\d{2,5}$'
           add_label: 'false'
-        continue-on-error: true
-      - name: Assert action ran with title_regex
+          token: 'dummy-token'
+      - name: Assert action completed
         run: |
           echo "Action completed with title_regex input"
-          echo "PASS: action accepted title_regex input"
+          echo "PASS"
