@@ -1,4 +1,4 @@
-name: Test ticket_key_regex validation
+name: Test ticket_key_regex input
 on:
   workflow_dispatch:
 jobs:
@@ -18,8 +18,11 @@ jobs:
           add_label: 'false'
           token: ${{ github.token }}
         env:
+          GITHUB_EVENT_NAME: pull_request
+          GITHUB_HEAD_REF: feature-branch
+          GITHUB_BASE_REF: main
           PR_TITLE: 'feat(PROJECT-123): add new feature'
       - name: Assert action completed
         run: |
-          echo "Action completed with ticket_key_regex validation"
+          echo "Action completed with ticket_key_regex input"
           echo "PASS"

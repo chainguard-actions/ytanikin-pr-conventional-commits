@@ -1,4 +1,4 @@
-name: Test custom_labels mapping
+name: Test custom_labels input
 on:
   workflow_dispatch:
 jobs:
@@ -13,13 +13,16 @@ jobs:
       - id: action
         uses: .
         with:
-          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert","wip"]'
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+          custom_labels: '{"feat": "feature", "fix": "bugfix", "docs": "documentation", "test": "testing", "ci": "CI/CD", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
           add_label: 'false'
-          custom_labels: '{"feat": "feature", "fix": "fix", "docs": "documentation", "test": "test", "ci": "CI/CD", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert", "wip": "WIP"}'
           token: ${{ github.token }}
         env:
-          PR_TITLE: 'feat: implement custom label mapping'
+          GITHUB_EVENT_NAME: pull_request
+          GITHUB_HEAD_REF: feature-branch
+          GITHUB_BASE_REF: main
+          PR_TITLE: 'fix: resolve login bug'
       - name: Assert action completed
         run: |
-          echo "Action completed with custom_labels configuration"
+          echo "Action completed with custom_labels input"
           echo "PASS"
