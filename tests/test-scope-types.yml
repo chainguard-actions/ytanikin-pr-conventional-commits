@@ -1,0 +1,26 @@
+name: Test scope_types input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_REF: refs/pull/2/merge
+      GITHUB_HEAD_REF: fix-login-message
+      GITHUB_BASE_REF: main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+          scope_types: '["login","signup","checkout","payment",""]'
+          add_label: 'false'
+          token: 'dummy-token'
+        env:
+          GITHUB_EVENT_PATH: ${{ github.workspace }}/actions/hardened/ytanikin--pr-conventional-commits/1.5.2/tests/fixtures/pr_event_scoped.json
+      - name: Assert action completed with scope_types
+        run: |
+          echo "Action completed successfully with scope_types input"
+          echo "PASS"

@@ -1,0 +1,26 @@
+name: Test ticket_key_regex input (deprecated)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_REF: refs/pull/3/merge
+      GITHUB_HEAD_REF: feat-project-1234
+      GITHUB_BASE_REF: main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+          ticket_key_regex: 'PROJECT-\d{2,5}$'
+          add_label: 'false'
+          token: 'dummy-token'
+        env:
+          GITHUB_EVENT_PATH: ${{ github.workspace }}/actions/hardened/ytanikin--pr-conventional-commits/1.5.2/tests/fixtures/pr_event_ticket.json
+      - name: Assert action completed with ticket_key_regex
+        run: |
+          echo "Action completed successfully with ticket_key_regex (deprecated) input"
+          echo "PASS"
