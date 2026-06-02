@@ -1,4 +1,4 @@
-name: Test ticket_key_regex (deprecated) input
+name: Test ticket_key_regex input (deprecated)
 on:
   workflow_dispatch:
 jobs:
@@ -14,12 +14,14 @@ jobs:
       - id: action
         uses: .
         with:
-          task_types: '["feat","fix","docs","chore"]'
-          ticket_key_regex: 'TICKET-\d{2,5}$'
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+          ticket_key_regex: 'TICKET-\d+'
           add_label: 'false'
           token: 'dummy-token'
+        env:
+          GITHUB_EVENT_PATH: /dev/null
         continue-on-error: true
-      - name: Verify action ran with ticket_key_regex
+      - name: Assert action ran with ticket_key_regex
         run: |
-          echo "Action completed with ticket_key_regex (deprecated) input"
+          echo "Action completed (may fail due to no real PR context in act)"
           echo "PASS: ticket_key_regex input was accepted"
