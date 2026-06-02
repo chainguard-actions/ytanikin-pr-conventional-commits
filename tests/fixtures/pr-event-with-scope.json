@@ -1,0 +1,25 @@
+{
+  "action": "opened",
+  "number": 2,
+  "pull_request": {
+    "number": 2,
+    "title": "fix(login): fix message in login page",
+    "body": "This PR fixes a message in the login page",
+    "head": {
+      "ref": "fix-login-message",
+      "sha": "abc124"
+    },
+    "base": {
+      "ref": "main",
+      "sha": "def456"
+    },
+    "labels": []
+  },
+  "repository": {
+    "name": "test-repo",
+    "full_name": "test-owner/test-repo",
+    "owner": {
+      "login": "test-owner"
+    }
+  }
+}

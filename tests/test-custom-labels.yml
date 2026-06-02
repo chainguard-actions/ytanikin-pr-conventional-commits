@@ -15,11 +15,11 @@ jobs:
         uses: .
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          custom_labels: '{"feat": "feature", "fix": "bugfix", "docs": "documentation", "test": "testing", "ci": "CI/CD", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
+          custom_labels: '{"feat": "feature", "fix": "fix", "docs": "documentation", "test": "test", "ci": "CI/CD", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
           add_label: 'false'
           token: 'dummy-token'
         env:
-          GITHUB_EVENT_PATH: ${{ github.workspace }}/actions/hardened/ytanikin--pr-conventional-commits/1.5.2/tests/fixtures/pr_event_valid.json
+          GITHUB_EVENT_PATH: ${{ github.workspace }}/actions/hardened/ytanikin--pr-conventional-commits/1.5.2/tests/fixtures/pr-event-valid.json
       - name: Assert action completed with custom_labels
         run: |
           echo "Action completed successfully with custom_labels input"

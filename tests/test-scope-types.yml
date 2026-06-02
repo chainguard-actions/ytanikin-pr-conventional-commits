@@ -19,7 +19,7 @@ jobs:
           add_label: 'false'
           token: 'dummy-token'
         env:
-          GITHUB_EVENT_PATH: ${{ github.workspace }}/actions/hardened/ytanikin--pr-conventional-commits/1.5.2/tests/fixtures/pr_event_scoped.json
+          GITHUB_EVENT_PATH: ${{ github.workspace }}/actions/hardened/ytanikin--pr-conventional-commits/1.5.2/tests/fixtures/pr-event-with-scope.json
       - name: Assert action completed with scope_types
         run: |
           echo "Action completed successfully with scope_types input"
