@@ -1,4 +1,4 @@
-name: Test scope_types input
+name: Test scope_types input validation
 on:
   workflow_dispatch:
 jobs:
@@ -6,24 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Create PR event payload with scoped title
+      - name: Set up PR event payload with scoped title
         run: |
-          cat > /tmp/pr_event_scope.json <<'EOF'
-          {
-            "action": "opened",
-            "pull_request": {
-              "number": 2,
-              "title": "fix(login): fix message in login page",
-              "labels": []
-            },
-            "repository": {
-              "name": "test-repo",
-              "owner": {
-                "login": "test-owner"
-              }
-            }
-          }
-          EOF
+          cp $GITHUB_WORKSPACE/actions/hardened/ytanikin--pr-conventional-commits/1.4.2/tests/fixtures/pr_event_scope.json /tmp/pr_event_scope.json
+          echo "GITHUB_EVENT_PATH=/tmp/pr_event_scope.json" >> $GITHUB_ENV
       - id: action
         uses: .
         with:
@@ -33,11 +19,14 @@ jobs:
           token: 'dummy-token'
         env:
           GITHUB_EVENT_NAME: pull_request
-          GITHUB_EVENT_PATH: /tmp/pr_event_scope.json
           GITHUB_REF: refs/pull/2/merge
-          GITHUB_HEAD_REF: feature-login
+          GITHUB_HEAD_REF: fix-login-branch
           GITHUB_BASE_REF: main
       - name: Assert action succeeded with valid scope
         run: |
-          echo "Action completed successfully with valid scope type"
-          echo "PASS"
+          echo "Action outcome: ${{ steps.action.outcome }}"
+          if [ "${{ steps.action.outcome }}" != "success" ]; then
+            echo "FAIL: expected action to succeed for valid scope 'login'"
+            exit 1
+          fi
+          echo "PASS: action succeeded with valid scope_types and login scope"

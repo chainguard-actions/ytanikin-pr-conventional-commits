@@ -1,0 +1,27 @@
+{
+  "action": "opened",
+  "number": 3,
+  "pull_request": {
+    "number": 3,
+    "title": "feat: PROJ-12345 add new feature",
+    "body": "This PR adds a new feature for ticket PROJ-12345",
+    "head": {
+      "ref": "feat-ticket-branch",
+      "sha": "abc125"
+    },
+    "base": {
+      "ref": "main",
+      "sha": "def456"
+    },
+    "labels": [],
+    "user": {
+      "login": "testuser"
+    }
+  },
+  "repository": {
+    "name": "test-repo",
+    "owner": {
+      "login": "testowner"
+    }
+  }
+}

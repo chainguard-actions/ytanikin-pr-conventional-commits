@@ -6,38 +6,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Create PR event payload for custom labels test
+      - name: Set up PR event payload for custom labels
         run: |
-          cat > /tmp/pr_event_custom.json <<'EOF'
-          {
-            "action": "opened",
-            "pull_request": {
-              "number": 4,
-              "title": "feat: add new feature",
-              "labels": []
-            },
-            "repository": {
-              "name": "test-repo",
-              "owner": {
-                "login": "test-owner"
-              }
-            }
-          }
-          EOF
+          cp $GITHUB_WORKSPACE/actions/hardened/ytanikin--pr-conventional-commits/1.4.2/tests/fixtures/pr_event_custom_labels.json /tmp/pr_event_custom_labels.json
+          echo "GITHUB_EVENT_PATH=/tmp/pr_event_custom_labels.json" >> $GITHUB_ENV
       - id: action
         uses: .
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          custom_labels: '{"feat":"feature","fix":"bugfix","docs":"documentation","test":"test","ci":"CI/CD","refactor":"refactor","perf":"performance","chore":"chore","revert":"revert"}'
+          custom_labels: '{"feat":"feature","fix":"bugfix","docs":"documentation","test":"testing","ci":"CI/CD","refactor":"refactor","perf":"performance","chore":"chore","revert":"revert"}'
           add_label: 'false'
           token: 'dummy-token'
         env:
           GITHUB_EVENT_NAME: pull_request
-          GITHUB_EVENT_PATH: /tmp/pr_event_custom.json
           GITHUB_REF: refs/pull/4/merge
-          GITHUB_HEAD_REF: feature-custom-labels
+          GITHUB_HEAD_REF: feat-custom-labels-branch
           GITHUB_BASE_REF: main
       - name: Assert action succeeded with custom_labels
         run: |
-          echo "Action completed with custom_labels input provided"
-          echo "PASS"
+          echo "Action outcome: ${{ steps.action.outcome }}"
+          if [ "${{ steps.action.outcome }}" != "success" ]; then
+            echo "FAIL: expected action to succeed with custom_labels input"
+            exit 1
+          fi
+          echo "PASS: action succeeded with custom_labels input"

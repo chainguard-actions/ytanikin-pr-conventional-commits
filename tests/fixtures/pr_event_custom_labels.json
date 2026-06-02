@@ -1,0 +1,27 @@
+{
+  "action": "opened",
+  "number": 4,
+  "pull_request": {
+    "number": 4,
+    "title": "feat: add custom label feature",
+    "body": "This PR tests custom labels",
+    "head": {
+      "ref": "feat-custom-labels-branch",
+      "sha": "abc126"
+    },
+    "base": {
+      "ref": "main",
+      "sha": "def456"
+    },
+    "labels": [],
+    "user": {
+      "login": "testuser"
+    }
+  },
+  "repository": {
+    "name": "test-repo",
+    "owner": {
+      "login": "testowner"
+    }
+  }
+}
