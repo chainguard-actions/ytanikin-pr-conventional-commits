@@ -1,4 +1,4 @@
-name: Test ticket_key_regex input
+name: Test basic usage with task_types
 on:
   workflow_dispatch:
 jobs:
@@ -6,14 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Create PR event payload with ticket number in title
+      - name: Create PR event payload
         run: |
-          cat > /tmp/pr_event_ticket.json <<'EOF'
+          cat > /tmp/pr_event.json <<'EOF'
           {
             "action": "opened",
             "pull_request": {
-              "number": 3,
-              "title": "feat: PROJECT-1234 add new feature",
+              "number": 1,
+              "title": "feat: add new feature",
               "labels": []
             },
             "repository": {
@@ -28,16 +28,15 @@ jobs:
         uses: .
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          ticket_key_regex: '^PROJECT-\d{2,5}$'
           add_label: 'false'
           token: 'dummy-token'
         env:
           GITHUB_EVENT_NAME: pull_request
-          GITHUB_EVENT_PATH: /tmp/pr_event_ticket.json
-          GITHUB_REF: refs/pull/3/merge
-          GITHUB_HEAD_REF: feature-ticket
+          GITHUB_EVENT_PATH: /tmp/pr_event.json
+          GITHUB_REF: refs/pull/1/merge
+          GITHUB_HEAD_REF: feature-branch
           GITHUB_BASE_REF: main
-      - name: Assert action succeeded with ticket key regex
+      - name: Assert action succeeded
         run: |
-          echo "Action completed with ticket_key_regex input provided"
+          echo "Action completed successfully with valid conventional commit title"
           echo "PASS"

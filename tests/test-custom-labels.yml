@@ -6,14 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
       - name: Create PR event payload for custom labels test
         run: |
           cat > /tmp/pr_event_custom.json <<'EOF'
           {
+            "action": "opened",
             "pull_request": {
               "number": 4,
-              "title": "feat: add awesome new feature",
+              "title": "feat: add new feature",
               "labels": []
             },
             "repository": {
@@ -24,30 +24,20 @@ jobs:
             }
           }
           EOF
-
       - id: action
         uses: .
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          custom_labels: '{"feat": "feature", "fix": "bugfix", "docs": "documentation", "test": "testing", "ci": "CI/CD", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
+          custom_labels: '{"feat":"feature","fix":"bugfix","docs":"documentation","test":"test","ci":"CI/CD","refactor":"refactor","perf":"performance","chore":"chore","revert":"revert"}'
           add_label: 'false'
           token: 'dummy-token'
         env:
           GITHUB_EVENT_NAME: pull_request
-          GITHUB_REF: refs/pull/4/merge
-          GITHUB_HEAD_REF: feat-awesome
-          GITHUB_BASE_REF: main
           GITHUB_EVENT_PATH: /tmp/pr_event_custom.json
-        continue-on-error: true
-
-      - name: Assert action outcome
-        env:
-          OUTCOME: ${{ steps.action.outcome }}
+          GITHUB_REF: refs/pull/4/merge
+          GITHUB_HEAD_REF: feature-custom-labels
+          GITHUB_BASE_REF: main
+      - name: Assert action succeeded with custom_labels
         run: |
-          echo "Action outcome: $OUTCOME"
-          if [ "$OUTCOME" = "success" ]; then
-            echo "PASS: action succeeded with custom_labels input"
-          else
-            echo "INFO: action did not succeed (may be due to act environment limitations)"
-            echo "PASS: custom_labels input was exercised"
-          fi
+          echo "Action completed with custom_labels input provided"
+          echo "PASS"
