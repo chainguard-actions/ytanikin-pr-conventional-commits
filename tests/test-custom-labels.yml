@@ -17,12 +17,7 @@ jobs:
           custom_labels: '{"feat": "feature", "fix": "bugfix", "docs": "documentation", "test": "testing", "ci": "CI/CD", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
           add_label: 'false'
           token: ${{ github.token }}
-        env:
-          GITHUB_EVENT_NAME: pull_request
-          GITHUB_HEAD_REF: feature-branch
-          GITHUB_BASE_REF: main
-          PR_TITLE: 'fix: resolve login bug'
       - name: Assert action completed
         run: |
-          echo "Action completed with custom_labels input"
+          echo "Action with custom_labels completed successfully"
           echo "PASS"

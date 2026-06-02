@@ -17,9 +17,7 @@ jobs:
           add_label: 'false'
           token: ${{ github.token }}
         env:
-          GITHUB_EVENT_NAME: pull_request
-          GITHUB_HEAD_REF: feature-branch
-          GITHUB_BASE_REF: main
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
           PR_TITLE: 'feat: add new feature'
       - name: Assert action completed
         run: |
