@@ -1,0 +1,31 @@
+{
+  "action": "opened",
+  "number": 1,
+  "pull_request": {
+    "number": 1,
+    "title": "feat: add new feature",
+    "body": "This PR adds a new feature",
+    "head": {
+      "ref": "feature-branch",
+      "sha": "abc123"
+    },
+    "base": {
+      "ref": "main",
+      "sha": "def456"
+    },
+    "labels": [],
+    "user": {
+      "login": "testuser"
+    }
+  },
+  "repository": {
+    "name": "test-repo",
+    "full_name": "testorg/test-repo",
+    "owner": {
+      "login": "testorg"
+    }
+  },
+  "sender": {
+    "login": "testuser"
+  }
+}
