@@ -1,0 +1,25 @@
+{
+  "action": "opened",
+  "number": 3,
+  "pull_request": {
+    "number": 3,
+    "title": "feat: PROJECT-1234 add new feature",
+    "body": "This PR adds a new feature for PROJECT-1234",
+    "head": {
+      "ref": "feat-project-1234",
+      "sha": "abc125"
+    },
+    "base": {
+      "ref": "main",
+      "sha": "def456"
+    },
+    "labels": []
+  },
+  "repository": {
+    "name": "test-repo",
+    "full_name": "test-owner/test-repo",
+    "owner": {
+      "login": "test-owner"
+    }
+  }
+}
