@@ -6,7 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_EVENT_NAME: pull_request
-      GITHUB_HEAD_REF: feature-branch
+      GITHUB_REF: refs/pull/3/merge
+      GITHUB_HEAD_REF: chore/update-deps
       GITHUB_BASE_REF: main
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -14,10 +15,12 @@ jobs:
         uses: .
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          custom_labels: '{"feat": "feature", "fix": "bugfix", "docs": "documentation", "test": "testing", "ci": "CI/CD", "refactor": "refactor", "perf": "performance", "chore": "chore", "revert": "revert"}'
           add_label: 'false'
+          custom_labels: '{"feat":"feature","fix":"bugfix","docs":"documentation","test":"testing","ci":"CI/CD","refactor":"refactor","perf":"performance","chore":"chore","revert":"revert"}'
           token: ${{ github.token }}
-      - name: Assert action completed
+        env:
+          PR_TITLE: 'chore: update dependencies'
+      - name: Assert action completed with custom_labels
         run: |
-          echo "Action with custom_labels completed successfully"
+          echo "Action completed with custom_labels input"
           echo "PASS"
