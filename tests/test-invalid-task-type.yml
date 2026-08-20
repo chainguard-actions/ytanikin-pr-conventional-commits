@@ -1,4 +1,4 @@
-name: Test title_regex validation
+name: Test invalid task type in PR title
 on:
   workflow_dispatch:
 jobs:
@@ -7,15 +7,15 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Set up pull_request event payload with title matching regex
+      - name: Set up pull_request event payload with invalid task type
         run: |
           mkdir -p /tmp/github-event
           cat > /tmp/github-event/event.json <<'EOF'
           {
             "action": "opened",
             "pull_request": {
-              "number": 5,
-              "title": "feat: add new feature PROJECT-1234",
+              "number": 2,
+              "title": "invalid: this should fail validation",
               "labels": []
             },
             "repository": {
@@ -34,20 +34,21 @@ jobs:
         continue-on-error: true
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          title_regex: 'PROJECT-\d{2,5}$'
           add_label: 'false'
 
-      - name: Assert action ran (title matches regex, should pass regex validation)
+      - name: Assert action failed (invalid task type should be rejected)
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "outcome: $OUTCOME"
-          # Title "feat: add new feature PROJECT-1234" matches PROJECT-\d{2,5}$
-          # Under the harness, it may fail due to API calls on sentinel repo.
-          if [ "$OUTCOME" = "success" ]; then
-            echo "PASS: action succeeded with title matching regex"
-          elif [ "$OUTCOME" = "failure" ]; then
-            echo "PASS: action failed gracefully (expected under harness - sentinel repo or missing PR context)"
+          # The action should fail because "invalid" is not in the task_types list.
+          # Under the harness, it may also fail due to missing PR context.
+          # Either way, failure is the expected outcome.
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action correctly failed for invalid task type or missing PR context"
+          elif [ "$OUTCOME" = "success" ]; then
+            echo "FAIL: action should have failed for invalid task type 'invalid'"
+            exit 1
           else
             echo "FAIL: unexpected outcome '$OUTCOME'"
             exit 1

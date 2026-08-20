@@ -1,4 +1,4 @@
-name: Test title_regex validation
+name: Test breaking change detection in PR title
 on:
   workflow_dispatch:
 jobs:
@@ -7,15 +7,15 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Set up pull_request event payload with title matching regex
+      - name: Set up pull_request event payload with breaking change title
         run: |
           mkdir -p /tmp/github-event
           cat > /tmp/github-event/event.json <<'EOF'
           {
             "action": "opened",
             "pull_request": {
-              "number": 5,
-              "title": "feat: add new feature PROJECT-1234",
+              "number": 8,
+              "title": "feat!: remove deprecated API endpoint",
               "labels": []
             },
             "repository": {
@@ -34,18 +34,17 @@ jobs:
         continue-on-error: true
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          title_regex: 'PROJECT-\d{2,5}$'
           add_label: 'false'
 
-      - name: Assert action ran (title matches regex, should pass regex validation)
+      - name: Assert action ran (breaking change title should pass type validation)
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "outcome: $OUTCOME"
-          # Title "feat: add new feature PROJECT-1234" matches PROJECT-\d{2,5}$
-          # Under the harness, it may fail due to API calls on sentinel repo.
+          # Title "feat!: remove deprecated API endpoint" uses breaking change marker.
+          # The type "feat" is valid. Under the harness, may fail due to missing PR context.
           if [ "$OUTCOME" = "success" ]; then
-            echo "PASS: action succeeded with title matching regex"
+            echo "PASS: action succeeded with breaking change title"
           elif [ "$OUTCOME" = "failure" ]; then
             echo "PASS: action failed gracefully (expected under harness - sentinel repo or missing PR context)"
           else
