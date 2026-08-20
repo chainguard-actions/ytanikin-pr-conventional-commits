@@ -1,4 +1,4 @@
-name: Test basic conventional commit check
+name: Test scope label feature
 on:
   workflow_dispatch:
 jobs:
@@ -11,7 +11,8 @@ jobs:
         continue-on-error: true
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          add_label: 'false'
+          add_label: 'true'
+          add_scope_label: 'true'
         env:
           GITHUB_EVENT_NAME: pull_request
           GITHUB_REF: refs/pull/1/merge
