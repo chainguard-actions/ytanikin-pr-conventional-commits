@@ -1,0 +1,27 @@
+name: Test invalid task_types input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          task_types: 'not-a-json-array'
+          add_label: 'false'
+          token: ${{ github.token }}
+      - name: Assert action fails with invalid task_types
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # Invalid task_types (not a JSON array) should cause the action to fail
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed as expected with invalid task_types"
+          else
+            echo "FAIL: expected failure but got '$OUTCOME'"
+            exit 1
+          fi

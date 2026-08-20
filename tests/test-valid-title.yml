@@ -1,4 +1,4 @@
-name: Test title_regex input
+name: Test valid conventional commit title
 on:
   workflow_dispatch:
 jobs:
@@ -11,7 +11,6 @@ jobs:
         continue-on-error: true
         with:
           task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
-          title_regex: 'PROJECT-\d{2,5}$'
           add_label: 'false'
           token: ${{ github.token }}
       - name: Assert action ran (fails gracefully without PR context under workflow_dispatch)
