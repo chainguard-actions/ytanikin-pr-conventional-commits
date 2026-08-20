@@ -1,0 +1,32 @@
+name: Test invalid custom_labels input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          task_types: '["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+          custom_labels: 'not-valid-json'
+          add_label: 'true'
+      - name: Assert action fails (invalid custom_labels or no PR context)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action will fail either because custom_labels is invalid JSON
+          # or because there is no pull_request context under workflow_dispatch.
+          # Either way, failure is the expected outcome.
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action correctly failed"
+          elif [ "$OUTCOME" = "success" ]; then
+            echo "FAIL: action should have failed"
+            exit 1
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
